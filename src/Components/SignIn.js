@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 function Copyright() {
@@ -26,7 +26,7 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -44,15 +44,15 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+});
 
-export default class SignIn extends Component {
+class SignIn extends Component {
   handleSubmit(event) {
     event.preventDefault();
-    
+
   }
   render() {
-    const classes = useStyles();
+    const { classes } = this.props;
     return (
       <Container component="main" maxWidth="xs" >
         <CssBaseline />
@@ -120,3 +120,5 @@ export default class SignIn extends Component {
     );
   }
 }
+
+export default withStyles(useStyles)(SignIn)
