@@ -1,3 +1,8 @@
+/*
+ * @Author: akliuxingyuan
+ * @Date: 2021-03-13 14:37:12
+ * @Description: SignIn Page
+ */
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,6 +17,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import history from '../utils/history';
 
 function Copyright() {
   return (
@@ -47,10 +54,19 @@ const useStyles = theme => ({
 });
 
 class SignIn extends Component {
+  constructor(props){
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   handleSubmit(event) {
     event.preventDefault();
-
+    /********* up **********/
+    console.log(event.target.email.value);
+    console.log(event.target.password.value);
+    /********* down ********/
+    history.push('/MainPage');
   }
+
   render() {
     const { classes } = this.props;
     return (
@@ -98,7 +114,7 @@ class SignIn extends Component {
               className={classes.submit}
             >
               Sign In
-          </Button>
+            </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -106,7 +122,7 @@ class SignIn extends Component {
               </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/SignUp" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
