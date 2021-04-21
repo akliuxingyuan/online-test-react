@@ -19,6 +19,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import history from '../utils/history';
+import axios from 'axios';
 
 function Copyright() {
   return (
@@ -54,17 +55,48 @@ const useStyles = theme => ({
 });
 
 class SignIn extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(event) {
     event.preventDefault();
-    /********* up **********/
-    console.log(event.target.email.value);
-    console.log(event.target.password.value);
-    /********* down ********/
-    history.push('/MainPage');
+
+    axios.post(process.env.REACT_APP_API + 'signin/', {
+      username: event.target.username.value,
+      password: event.target.password.value
+    }, {
+      responseType: 'json',
+      withCredentials: true
+    })
+      .then(response => {
+        // 使用浏览器本地存储保存token
+        if (event.target.remember.value) {
+          // 记住登录
+          sessionStorage.clear();
+          localStorage.token = response.data.token;
+          localStorage.user_id = response.data.user_id;
+          localStorage.username = response.data.username;
+        } else {
+          // 未记住登录
+          localStorage.clear();
+          sessionStorage.token = response.data.token;
+          sessionStorage.user_id = response.data.user_id;
+          sessionStorage.username = response.data.username;
+        }
+        // 跳转页面
+        history.push('/MainPage');
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+          this.error_pwd_message = '用户名或密码错误';
+        } else {
+          this.error_pwd_message = '服务器错误';
+        }
+        this.error_pwd = true;
+        alert("error")
+      })
   }
 
   render() {
@@ -85,10 +117,10 @@ class SignIn extends Component {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="User Name"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -103,7 +135,7 @@ class SignIn extends Component {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="primary" id="remember" />}
               label="Remember me"
             />
             <Button
