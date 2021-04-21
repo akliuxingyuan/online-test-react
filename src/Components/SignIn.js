@@ -72,7 +72,7 @@ class SignIn extends Component {
     })
       .then(response => {
         // 使用浏览器本地存储保存token
-        if (event.target.remember.value) {
+        if (event.target.remember.checked) {
           // 记住登录
           sessionStorage.clear();
           localStorage.token = response.data.token;
@@ -99,8 +99,17 @@ class SignIn extends Component {
       })
   }
 
+  checkStatus() {
+    if (localStorage.token || sessionStorage.token) {
+      setTimeout(() => {
+        history.push('/MainPage')
+      }, 500);
+    }
+  }
+
   render() {
     const { classes } = this.props;
+    this.checkStatus();
     return (
       <Container component="main" maxWidth="xs" >
         <CssBaseline />
